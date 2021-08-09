@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: security
+logging:
+  level:
+    web: DEBUG
+    "tw.com.fcb": debug
+mimosa:
+  security:
+    enabled: true
+    backend-auth-service.url: "http://${server.address:localhost}:${server.port:8080}/backend-auth"
+    strict: false
+    ignoring:
+      - method: options
+        path:
+          - "/**"
+      - path:
+          - "/v3/api-docs"
+          - "/v3/api-docs/**"
+          - "/swagger-ui"
+          - "/swagger-ui/**"
+          - "/h2"
+          - "/h2/**"
+          - "/actuator"
+          - "/actuator/**"
+          - "/swagger-ui.html"
+          - "/backend-auth/**"
+  web.strict: true
+  openfeign:
+    logger:
+      level: FULL
+  tracing:
+    extra:
+      fields:
+        - "transactionId"
+        - "sourceId"
+info:
+  response:
+    id: test
+debug: true

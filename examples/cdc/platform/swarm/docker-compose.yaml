@@ -1,0 +1,80 @@
+version: '3'
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: debezium/zookeeper:1.6
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+  kafka:
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    image: debezium/kafka:1.6
+    ports:
+      - 9092:9092
+    links:
+      - zookeeper
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+      - ADVERTISED_HOST_NAME=192.168.50.100
+  kafka-UI:
+    container_name: kafka-UI
+    depends_on:
+      - kafka
+    image: obsidiandynamics/kafdrop
+    ports:
+      - 9000:9000
+    links:
+      - zookeeper
+      - kafka
+      - mysql
+    environment:
+      - KAFKA_BROKERCONNECT=192.168.50.100:9092
+      - JVM_OPTS=-Xms32M -Xmx64M
+      - SERVER_SERVLET_CONTEXTPATH=/
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: customerdb
+    volumes:
+      - ./:/docker-entrypoint-initdb.d
+  connect:
+    container_name: debezium-connect
+    depends_on:
+      - kafka
+      - mysql
+    image: harbor.softleader.com.tw/library/debezium-connect:1.6
+    ports:
+      - 8083:8083
+    links:
+      - zookeeper
+      - kafka
+      - mysql
+    volumes:
+      - ./json:/kafka/docker-entrypoint-init.d/connector-init.d
+    entrypoint: ["/kafka/docker-entrypoint-init.d/wait-for-it.sh","-t","30", "mysql:3306", "--", "sh","-c","/kafka/docker-entrypoint-init.d/entrypoint.sh"]
+    command: ["8"]
+    healthcheck:
+      test: ["CMD","/bin/sh","/kafka/docker-entrypoint-init.d/healthcheck.sh","8083"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses
+    deploy:
+      resources:
+        limits:
+          memory: 512M

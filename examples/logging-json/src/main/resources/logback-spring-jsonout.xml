@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <springProperty scope="context" name="appName" source="info.application.name"/>
+  <springProperty scope="context" name="appVersion" source="info.application.version"/>
+  <springProperty scope="context" name="javaVmVendor" source="info.java.vm.vendor"/>
+  <springProperty scope="context" name="javaVersion" source="info.java.version"/>
+  <springProperty scope="context" name="appEncoding" source="info.application.encoding"/>
+  <springProperty scope="context" name="appDescription" source="info.application.description"/>
+  <springProperty scope="context" name="springBootVersion" source="info.spring.boot.version"/>
+  <springProperty scope="context" name="springVersion" source="info.spring.version"/>
+  <springProperty scope="context" name="mimosaVersion" source="info.mimosa.version"/>
+
+  <!-- ref: https://github.com/logstash/logstash-logback-encoder/tree/main#providers-for-loggingevents -->
+  <appender name="jsonout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <mdc/>
+        <timestamp>
+          <timeZone>Asia/Taipei</timeZone>
+          <fieldName>logDateTime</fieldName>
+        </timestamp>
+        <logLevel>
+          <fieldName>logLevel</fieldName>
+        </logLevel>
+        <threadName/>
+        <loggerName>
+          <fieldName>class_name</fieldName>
+        </loggerName>
+        <message>
+          <fieldName>payload</fieldName>
+        </message>
+        <pattern>
+          <pattern>
+            {
+            "app_name": "${appName:-}",
+            "app_version": "${appVersion:-}",
+            "java_vm_vendor": "${javaVmVendor:-}",
+            "java_version": "${javaVersion:-}",
+            "app_encoding": "${appEncoding:-}",
+            "app_description": "${appDescription:-}",
+            "spring_boot_version": "${springBootVersion:-}",
+            "spring_version": "${springVersion:-}",
+            "mimosa_version": "${mimosaVersion:-}",
+            "pid": "${PID:-}"
+            }
+          </pattern>
+        </pattern>
+        <stackTrace>
+          <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+            <maxLength>10240</maxLength> <!-- 最多帶 10k的 stack trace, 超過應該也沒用了 -->
+            <shortenedClassNameLength>20</shortenedClassNameLength>
+            <rootCauseFirst>true</rootCauseFirst> <!-- 將 root cause 擺最前面, 避免超過 10k 被 trim 掉 -->
+          </throwableConverter>
+        </stackTrace>
+      </providers>
+    </encoder>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="jsonout"/>
+  </root>
+
+  <logger name="tw.com.fcb.mimosa" level="debug"/>
+
+</configuration>

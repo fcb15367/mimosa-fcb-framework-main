@@ -1,0 +1,5 @@
+CREATE TABLE "USER" (
+  ID int GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+  name VARCHAR(50),
+  age int
+);

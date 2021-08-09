@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  tw.com.fcb.mimosa.ext.ddd.autoconfigure.MimosaDddAutoConfiguration

@@ -1,0 +1,8 @@
+spring.application.name: unit-testing
+info.response.id: ${APP_ID:main}
+mimosa:
+  tracing:
+    extra:
+      fields:
+        - "transactionId"
+        - "sourceId"

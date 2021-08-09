@@ -1,0 +1,44 @@
+spring:
+  application.name: ddd-structure
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      INDENT_OUTPUT: false
+      FAIL_ON_EMPTY_BEANS: false
+      FAIL_ON_SELF_REFERENCES: false
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+      ACCEPT_EMPTY_STRING_AS_NULL_OBJECT: true
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:user;DB_CLOSE_ON_EXIT=FALSE;IGNORECASE=TRUE;MODE=Oracle
+    username: ${DATABASE_USERNAME:sa}
+    platform: h2
+
+mimosa.web.strict: false
+
+logging:
+  level:
+    root: WARN
+    web: DEBUG
+    sql: DEBUG
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    tw.com.fcb.mimosa: DEBUG
+    jdbc:
+      resultsettable: INFO
+      sqltiming: INFO
+      sqlonly: FATAL
+      audit: FATAL
+      resultset: FATAL
+      connection: FATAL
+log4jdbc:
+  dump:
+    sql:
+      addsemicolon: true
+      maxlinelength: 0
+  trim:
+    sql:
+      extrablanklines: false

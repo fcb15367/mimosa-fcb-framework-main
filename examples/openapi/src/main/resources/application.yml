@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: openapi
+logging:
+  level:
+    web: DEBUG
+mimosa:
+  web.strict: true
+  tracing:
+    extra:
+      fields:
+        - "transactionId"
+        - "sourceId"

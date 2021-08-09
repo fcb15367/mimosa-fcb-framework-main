@@ -1,0 +1,6 @@
+mimosa:
+  cache:
+    caffeine:
+      expire-after-access: 6000000
+    redis:
+      default-expiration: 1200000

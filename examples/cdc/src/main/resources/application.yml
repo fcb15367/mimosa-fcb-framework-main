@@ -1,0 +1,35 @@
+logging:
+  level:
+    tw.com.fcb.mimosa.examples.DebeziumCDCApplication: DEBUG
+    tw.com.fcb.mimosa.examples.listener: DEBUG
+    org:
+      springframework:
+        transaction: DEBUG
+        aop: DEBUG
+    sql: DEBUG
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    jdbc:
+      resultsettable: INFO
+      sqltiming: INFO
+      sqlonly: FATAL
+      audit: FATAL
+      resultset: FATAL
+      connection: FATAL
+spring:
+  application:
+    name: cdc-example
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/customerdb
+    username: root
+    password: root
+  kafka:
+    consumer:
+      group-id: cdc-group-id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+

@@ -1,0 +1,9 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  tw.com.fcb.mimosa.bootstrap.BootstrapAutoConfiguration,\
+  tw.com.fcb.mimosa.actuator.MimosaMetricsAutoConfiguration,\
+  tw.com.fcb.mimosa.async.MimosaAsyncAutoConfiguration,\
+  tw.com.fcb.mimosa.web.WebApplicationConfiguration,\
+  tw.com.fcb.mimosa.logging.LoggingAutoConfiguration,\
+  tw.com.fcb.mimosa.tracing.TracingAutoConfiguration,\
+  tw.com.fcb.mimosa.tracing.DisableTracingAutoConfiguration,\
+  tw.com.fcb.mimosa.t9n.TranslationAutoConfiguration
